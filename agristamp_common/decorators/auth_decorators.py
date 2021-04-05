@@ -16,7 +16,7 @@ def auth_required_fastapi(func):
             raise HTTPException(500, 'Invalid Authorization header')
         
         # Try authenticate
-        auth_status = service_get('auth_service', token)
+        auth_status = service_get('auth_service', 'auth/users/me/', token)
         if auth_status.status_code == 200:
             return await func(*args, **kwargs)
 
