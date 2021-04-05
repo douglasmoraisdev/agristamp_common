@@ -8,7 +8,6 @@ from agristamp_common.utils.services import service_get
 def auth_required_fastapi(func):
     @wraps(func)
     async def wrapper(*args, **kwargs):
-        settings = kwargs['settings']
         auth_header = kwargs['Authorization']
 
         if auth_header[:6] == 'Bearer':
@@ -16,11 +15,9 @@ def auth_required_fastapi(func):
         else:
             raise HTTPException(500, 'Invalid Authorization header')
         
-        if settings.auth_service_url:
-
-            # Try authenticate
-            auth_status = service_get('auth_service', token)
-            if auth_status.status_code == 200:
-                return await func(*args, **kwargs)
+        # Try authenticate
+        auth_status = service_get('auth_service', token)
+        if auth_status.status_code == 200:
+            return await func(*args, **kwargs)
 
     return wrapper
