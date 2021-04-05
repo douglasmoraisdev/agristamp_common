@@ -1,20 +1,21 @@
 import requests
 import os
 
-def service_get(service_slug, endpoint, query=None):
+def service_get(service_slug, endpoint, headers=None, query=None):
    
-    service_url = f"{os.getenv('CLUSTER_URL')}/{os.getenv('stage')}/{service_slug}/{endpoint}"
-    
-    request = requests.get(service_url, query)
+    service_url = f"{os.getenv('CLUSTER_URL')}/{os.getenv('STAGE')}/{service_slug}/{endpoint}"
+   
+    request = requests.get(service_url, params=query, headers=headers)
+
+    print(request)    
 
     return request
 
 
-
-def service_post(service_slug, endpoint, payload=None):
+def service_post(service_slug, endpoint, headers=None, payload=None):
        
-    service_url = f"{os.getenv('CLUSTER_URL')}/{os.getenv('stage')}/{service_slug}/{endpoint}"
+    service_url = f"{os.getenv('CLUSTER_URL')}/{os.getenv('STAGE')}/{service_slug}/{endpoint}"
     
-    request = requests.post(service_url, data=payload)
+    request = requests.post(service_url, data=payload, headers=headers)
 
     return request
