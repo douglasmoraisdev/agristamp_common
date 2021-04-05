@@ -1,7 +1,7 @@
 from functools import wraps
 from fastapi import HTTPException
 
-from utils.services import service_get
+from agristamp_common.utils.services import service_get
 
 
 #decorator
