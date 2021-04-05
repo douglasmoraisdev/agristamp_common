@@ -7,8 +7,6 @@ def service_get(service_slug, endpoint, headers=None, query=None):
    
     request = requests.get(service_url, params=query, headers=headers)
 
-    print(request)    
-
     return request
 
 
