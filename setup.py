@@ -18,5 +18,5 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-	install_requires=['requests', 'pytest', 'boto3']
+	install_requires=['requests', 'pytest', 'boto3', 'httpx']
 )
