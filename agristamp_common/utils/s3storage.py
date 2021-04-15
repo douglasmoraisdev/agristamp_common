@@ -33,7 +33,7 @@ def create_presigned_url(bucket_name, object_name, expiration=3600):
     return response
 
 
-def upload_file(file_path, folder, bucket, object_name=None):
+def upload_file(file_path, folder, bucket, object_name=None, expiration=3600):
     """Upload a file to an S3 bucket
 
     :param file_path: File to upload
@@ -62,7 +62,7 @@ def upload_file(file_path, folder, bucket, object_name=None):
 
     s3_url = f"s3://{bucket}/{object_name}"
     object_url = f"https://{bucket}.s3-{AWS_REGION}.amazonaws.com/{object_name}"
-    presigned_url = create_presigned_url(bucket, object_name)
+    presigned_url = create_presigned_url(bucket, object_name, expiration=expiration)
 
     return_obj = {
         's3_url': s3_url,
@@ -73,7 +73,7 @@ def upload_file(file_path, folder, bucket, object_name=None):
     return return_obj
 
 
-def upload_fastapi_uploadfile(file, folder, bucket, object_name=None):
+def upload_fastapi_uploadfile(file, folder, bucket, object_name=None, expiration=3600):
     """Upload a file to an S3 bucket
 
     :param file_path: File to upload
@@ -109,7 +109,7 @@ def upload_fastapi_uploadfile(file, folder, bucket, object_name=None):
 
     s3_url = f"s3://{bucket}/{object_name}"
     object_url = f"https://{bucket}.s3-{AWS_REGION}.amazonaws.com/{object_name}"
-    presigned_url = create_presigned_url(bucket, object_name)
+    presigned_url = create_presigned_url(bucket, object_name, expiration=expiration)
     
 
     return_obj = {
@@ -121,7 +121,7 @@ def upload_fastapi_uploadfile(file, folder, bucket, object_name=None):
     return return_obj
 
 
-def upload_bytes(file_bytes, file_extension, folder, bucket, object_name=None):
+def upload_bytes(file_bytes, file_extension, folder, bucket, object_name=None, expiration=3600):
 
 
     # Create Temp File to Upload
@@ -149,7 +149,7 @@ def upload_bytes(file_bytes, file_extension, folder, bucket, object_name=None):
 
     s3_url = f"s3://{bucket}/{object_name}"
     object_url = f"https://{bucket}.s3-{AWS_REGION}.amazonaws.com/{object_name}"
-    presigned_url = create_presigned_url(bucket, object_name)
+    presigned_url = create_presigned_url(bucket, object_name, expiration=expiration)
 
 
     return_obj = {
