@@ -18,3 +18,16 @@ async def test_cache():
     assert cached is not None
     assert cached['id_agristamp'] == 8
     assert cached['id_allianz'] == 7
+
+
+@pytest.mark.asyncio
+async def test_cache_nok():
+
+    key = 'allianz_service'
+    field = 'culturas_service/culturas/allianz/abobora'
+    value = { "id_agristamp": 8, "id_allianz": 7 }
+
+    cached = await cache_or_service_get(key, field)
+
+    assert cached is None
+
