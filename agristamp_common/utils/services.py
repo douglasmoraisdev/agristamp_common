@@ -5,6 +5,10 @@ import json
 
 
 def service_get(service_slug, endpoint, headers=None, query=None):
+
+    # retira a barra do endpoint
+    if endpoint[0] == '/':
+        endpoint = endpoint[1:]
    
     service_url = f"{os.getenv('CLUSTER_URL')}/{os.getenv('STAGE')}/{service_slug}/{endpoint}"
    
@@ -14,7 +18,11 @@ def service_get(service_slug, endpoint, headers=None, query=None):
 
 
 def service_post(service_slug, endpoint, headers=None, payload=None):
-       
+
+    # retira a barra do endpoint
+    if endpoint[0] == '/':
+        endpoint = endpoint[1:]
+
     service_url = f"{os.getenv('CLUSTER_URL')}/{os.getenv('STAGE')}/{service_slug}/{endpoint}"
     
     request = requests.post(service_url, data=payload, headers=headers)
