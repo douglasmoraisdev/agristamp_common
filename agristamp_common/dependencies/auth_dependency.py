@@ -16,13 +16,23 @@ async def auth_required(
         raise HTTPException(HTTP_400_BAD_REQUEST, detail='Invalid Authorization header')        
     else: 
 
-        # Try authenticate
-        auth_service_slug = 'auth_service'
-        auth_endpoint = f'auth/users/services/{os.getenv("SERVICE_SLUG")}'
-        auth_header = {'Authorization': Authorization}
 
-        auth_status = service_get(auth_service_slug, auth_endpoint, auth_header)
-        if auth_status.status_code == 200:
-            return auth_status.json()
+        # Try authenticate internal client
+        if os.getenv("AGRISTAMP_KEY") is not None:
+            if Authorization == os.getenv("AGRISTAMP_KEY"):
+                return {'status': 'ok', 'source': 'agristamp_key'}
+            else:
+                raise HTTPException(401, 'Invalid AGRISTAMP_KEY')
+
         else:
-            raise HTTPException(auth_status.status_code, auth_status.json()['errors'])
+
+            # Try authenticate external client
+            auth_service_slug = 'auth_service'
+            auth_endpoint = f'auth/users/services/{os.getenv("SERVICE_SLUG")}'
+            auth_header = {'Authorization': Authorization}
+
+            auth_status = service_get(auth_service_slug, auth_endpoint, auth_header)
+            if auth_status.status_code == 200:
+                return auth_status.json()
+            else:
+                raise HTTPException(auth_status.status_code, auth_status.json()['errors'])
