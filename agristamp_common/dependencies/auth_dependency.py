@@ -19,7 +19,7 @@ async def auth_required(
 
         # Try authenticate internal client
         if os.getenv("AGRISTAMP_KEY") is not None:
-            if Authorization == os.getenv("AGRISTAMP_KEY"):
+            if Authorization == 'Bearer '+os.getenv("AGRISTAMP_KEY"):                
                 return {'status': 'ok', 'source': 'agristamp_key'}
             else:
                 raise HTTPException(401, 'Invalid AGRISTAMP_KEY')
