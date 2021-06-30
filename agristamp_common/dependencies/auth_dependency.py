@@ -30,5 +30,7 @@ async def auth_required(
         auth_status = service_get(auth_service_slug, auth_endpoint, auth_header)
         if auth_status.status_code == 200:
             return auth_status.json()
+        elif auth_status.status_code in [502, 404]:
+            raise HTTPException(auth_status.status_code, 'Serviço de autenticação indisponível')
         else:
             raise HTTPException(auth_status.status_code, auth_status.json()['errors'])
