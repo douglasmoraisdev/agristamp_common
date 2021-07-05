@@ -68,6 +68,7 @@ def upload_file(file_path, folder, bucket, object_name=None, expiration=3600):
         's3_url': s3_url,
         'object_url': object_url,
         'presigned_url': presigned_url,
+        'object_key': object_name
     }
 
     return return_obj
@@ -116,6 +117,7 @@ def upload_fastapi_uploadfile(file, folder, bucket, object_name=None, expiration
         's3_url': s3_url,
         'object_url': object_url,
         'presigned_url': presigned_url,
+        'object_key': object_name
     }
 
     return return_obj
@@ -156,6 +158,7 @@ def upload_bytes(file_bytes, file_extension, folder, bucket, object_name=None, e
         's3_url': s3_url,
         'object_url': object_url,
         'presigned_url': presigned_url,
+        'object_key': object_name
     }
 
     return return_obj
