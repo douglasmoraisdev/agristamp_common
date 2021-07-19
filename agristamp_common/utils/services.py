@@ -4,6 +4,7 @@ import os
 from .cache import redis_set, redis_hget
 import json
 import boto3
+from dotmap import DotMap
 
 
 def _generate_api_gateway_post(body: dict, path: str, stage: str):
@@ -278,9 +279,21 @@ def lambda_get(service_slug: str, endpoint: str, query: dict):
         Qualifier=stage
     )
 
-    response_payload = response['Payload']
+    {
+        'StatusCode': 123,
+        'FunctionError': 'string',
+        'LogResult': 'string',
+        'Payload': StreamingBody(),
+        'ExecutedVersion': 'string'
+    }
 
-    return response_payload
+    response_obj = DotMap()
+    response_obj.status_code = response['StatusCode']
+    response_obj.text = response['Payload'].read()
+    response_obj.json = lambda :response['Payload'].read()
+    response_obj.error = response['FunctionError']
+
+    return response_obj
 
 
 def lambda_post(service_slug: str, endpoint: str, body: dict):
@@ -306,9 +319,13 @@ def lambda_post(service_slug: str, endpoint: str, body: dict):
         Qualifier=stage
     )
 
-    response_payload = response['Payload']
+    response_obj = DotMap()
+    response_obj.status_code = response['StatusCode']
+    response_obj.text = response['Payload'].read()
+    response_obj.json = lambda :response['Payload'].read()
+    response_obj.error = response['FunctionError']
 
-    return response_payload
+    return response_obj
 
 
 def service_get(service_slug, endpoint, headers=None, query=None):

@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="agristamp_common",
-    version="1.5.9",
+    version="1.5.10",
     author="Agristamp",
     author_email="agristamp@agristamp.com.br",
     description="Agristamp Microservices Commom Dependencies",
@@ -18,5 +18,5 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-	install_requires=['requests', 'pytest', 'boto3', 'httpx', 'aioredis']
+	install_requires=['requests', 'pytest', 'boto3', 'httpx', 'aioredis', 'dotmap']
 )
