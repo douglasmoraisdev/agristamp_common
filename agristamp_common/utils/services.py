@@ -283,7 +283,7 @@ def lambda_get(service_slug: str, endpoint: str, query: dict):
     response_obj.status_code = response['StatusCode']
     response_obj.text = response['Payload'].read()
     response_obj.json = lambda :response['Payload'].read()
-    response_obj.error = response['FunctionError']
+    response_obj.error = response['FunctionError'] if 'FunctionError' in response else None
 
     return response_obj
 
