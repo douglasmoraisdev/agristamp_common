@@ -279,14 +279,6 @@ def lambda_get(service_slug: str, endpoint: str, query: dict):
         Qualifier=stage
     )
 
-    {
-        'StatusCode': 123,
-        'FunctionError': 'string',
-        'LogResult': 'string',
-        'Payload': StreamingBody(),
-        'ExecutedVersion': 'string'
-    }
-
     response_obj = DotMap()
     response_obj.status_code = response['StatusCode']
     response_obj.text = response['Payload'].read()
