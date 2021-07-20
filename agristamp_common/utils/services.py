@@ -20,7 +20,7 @@ def _generate_api_gateway_post(body: dict, path: str, endpoint: str, stage: str,
     if cookies:
         send_cookies = urllib.parse.urlencode(cookies, doseq=False)
     else:
-        send_cookies = None
+        send_cookies = ''
     
     payload = {
         "body": base64_body,
@@ -154,7 +154,7 @@ def _generate_api_gateway_get(query: dict, path: str, endpoint: str, stage: str,
     if cookies:
         send_cookies = urllib.parse.urlencode(cookies, doseq=False)
     else:
-        send_cookies = None
+        send_cookies = ''
 
     payload = {
             "resource": resourcePath,
@@ -279,7 +279,7 @@ def _generate_api_gateway_get(query: dict, path: str, endpoint: str, stage: str,
     return payload
 
 
-def lambda_get(service_slug: str, endpoint: str, query: dict, cookies: dict):
+def lambda_get(service_slug: str, endpoint: str, query: dict, cookies: dict = None):
 
     client = boto3.client('lambda')
 
@@ -322,7 +322,7 @@ def lambda_get(service_slug: str, endpoint: str, query: dict, cookies: dict):
     return response_obj
 
 
-def lambda_post(service_slug: str, endpoint: str, body: dict, cookies: dict):
+def lambda_post(service_slug: str, endpoint: str, body: dict, cookies: dict = None):
 
     client = boto3.client('lambda')
 
