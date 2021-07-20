@@ -7,25 +7,25 @@ import boto3
 from dotmap import DotMap
 
 
-def _generate_api_gateway_post(body: dict, path: str, stage: str):
+def _generate_api_gateway_post(body: dict, path: str, endpoint: str, stage: str, service_slug: str):
 
     #body = body.encode()
 
+    requestContext_path = f'/{stage}{path}'
+    resourcePath =  f'/{service_slug}/'+'{proxy+}'
+    base64_body = base64.b64encode(str(body).encode())
+
     payload = {
-        #"body": "{\"payload\": \"teste\"}",
-        "body": body,
-        #"path": "/base_service_2/test_post",
+        "body": base64_body,
         "path": path,
-        "resource": "/{proxy+}",
+        "resource": resourcePath,
         "httpMethod": "POST",
-        "isBase64Encoded": False,
+        "isBase64Encoded": True,
         "multiValueQueryStringParameters": {},
         "pathParameters": {
-            #"proxy": "/path/to/resource"
-            "proxy": path
+            "proxy": endpoint
         },
         "stageVariables": {
-            #"alias": "homolog"
             "alias": stage
         },
         "headers": {
@@ -105,28 +105,28 @@ def _generate_api_gateway_post(body: dict, path: str, stage: str):
             ]
         },
         "requestContext": {
-            "accountId": "123456789012",
-            "resourceId": "123456",
-            "stage": "prod",
-            "requestId": "c6af9ac6-7b61-11e6-9a41-93e8deadbeef",
-            "requestTime": "09/Apr/2015:12:34:56 +0000",
-            "requestTimeEpoch": 1428582896000,
-            "identity": {
-            "cognitoIdentityPoolId": None,
-            "accountId": None,
-            "cognitoIdentityId": None,
-            "caller": None,
-            "accessKey": None,
-            "sourceIp": "127.0.0.1",
-            "cognitoAuthenticationType": None,
-            "cognitoAuthenticationProvider": None,
-            "userArn": None,
-            "userAgent": "Custom User Agent String",
-            "user": None
+                "accountId": "123456789012",
+                "resourceId": "123456",
+                "stage": "prod",
+                "requestId": "c6af9ac6-7b61-11e6-9a41-93e8deadbeef",
+                "requestTime": "09/Apr/2015:12:34:56 +0000",
+                "requestTimeEpoch": 1428582896000,
+                "identity": {
+                "cognitoIdentityPoolId": None,
+                "accountId": None,
+                "cognitoIdentityId": None,
+                "caller": None,
+                "accessKey": None,
+                "sourceIp": "127.0.0.1",
+                "cognitoAuthenticationType": None,
+                "cognitoAuthenticationProvider": None,
+                "userArn": None,
+                "userAgent": "Custom User Agent String",
+                "user": None
             },
-            #"path": "/prod/path/to/resource",
-            "path": path,
-            "resourcePath": "/{proxy+}",
+            "path": requestContext_path,            
+            "resourcePath": resourcePath,
+            "stage": stage,
             "httpMethod": "POST",
             "apiId": "1234567890",
             "protocol": "HTTP/1.1"
@@ -136,15 +136,18 @@ def _generate_api_gateway_post(body: dict, path: str, stage: str):
     return payload
 
 
-def _generate_api_gateway_get(query: dict, path: str, stage: str):
+def _generate_api_gateway_get(query: dict, path: str, endpoint: str, stage: str, service_slug: str):
+
+    requestContext_path = f'/{stage}{path}'
+    resourcePath =  f'/{service_slug}/'+'{proxy+}'
 
     payload = {
-            "resource": "/{proxy+}",
+            "resource": resourcePath,
             "path": path,
             "httpMethod": "GET",
             "multiValueQueryStringParameters": query,
             "pathParameters": {
-                "proxy": path
+                "proxy": endpoint
             },
             "stageVariables": {
                 "alias": stage
@@ -245,8 +248,9 @@ def _generate_api_gateway_get(query: dict, path: str, stage: str):
                     "userAgent": "Custom User Agent String",
                     "user": None
                 },
-                "path": path,
-                "resourcePath": "/{proxy+}",
+                "path": requestContext_path,
+                "resourcePath": resourcePath,
+                "stage": stage,
                 "httpMethod": "GET",
                 "apiId": "1234567890",
                 "protocol": "HTTP/1.1"
@@ -265,10 +269,10 @@ def lambda_get(service_slug: str, endpoint: str, query: dict):
         endpoint = endpoint[1:]
 
     stage = os.getenv('STAGE')
-    path = f"{service_slug}/{endpoint}"
+    path = f"/{service_slug}/{endpoint}"
     function_name = f"{service_slug}_function"
 
-    payload = _generate_api_gateway_get(query=query, path=path, stage=stage)
+    payload = _generate_api_gateway_get(query=query, path=path, endpoint=endpoint, stage=stage, service_slug=service_slug)
 
     response = client.invoke(
         FunctionName=function_name,
@@ -308,10 +312,10 @@ def lambda_post(service_slug: str, endpoint: str, body: dict):
         endpoint = endpoint[1:]
 
     stage = os.getenv('STAGE')
-    path = f"{service_slug}/{endpoint}"
+    path = f"/{service_slug}/{endpoint}"
     function_name = f"{service_slug}_function"
 
-    payload = _generate_api_gateway_post(body=body, path=path, stage=stage)
+    payload = _generate_api_gateway_post(body=body, path=path, endpoint=endpoint, stage=stage, service_slug=service_slug)
 
     response = client.invoke(
         FunctionName=function_name,
