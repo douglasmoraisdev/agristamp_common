@@ -8,7 +8,7 @@ import boto3
 from dotmap import DotMap
 
 
-def _generate_api_gateway_post(body: dict, path: str, endpoint: str, stage: str, service_slug: str):
+def _generate_api_gateway_post(body: dict, path: str, endpoint: str, stage: str, service_slug: str, cookies: dict):
 
     #body = body.encode()
 
@@ -17,6 +17,10 @@ def _generate_api_gateway_post(body: dict, path: str, endpoint: str, stage: str,
     #base64_body = base64.b64encode(str(body).encode())
 
     base64_body = urllib.parse.urlencode(body, doseq=False)
+    if cookies:
+        send_cookies = urllib.parse.urlencode(cookies, doseq=False)
+    else:
+        send_cookies = None
     
     payload = {
         "body": base64_body,
@@ -30,6 +34,7 @@ def _generate_api_gateway_post(body: dict, path: str, endpoint: str, stage: str,
             "CloudFront-Is-Tablet-Viewer": "false",
             "CloudFront-Viewer-Country": "US",
             "Content-Type": "application/x-www-form-urlencoded",
+            "Cookie": send_cookies,
             "Host": "j8mj59343f.execute-api.us-east-1.amazonaws.com",
             "User-Agent": "python-requests/2.25.1",
             "Via": "1.1 f9efe5e72b7e5cc47bf34a0b0debcbe2.cloudfront.net (CloudFront)",
@@ -69,6 +74,9 @@ def _generate_api_gateway_post(body: dict, path: str, endpoint: str, stage: str,
             "Content-Type": [
                 "application/x-www-form-urlencoded"
             ],
+            "Cookie": [
+                send_cookies
+            ],            
             "Host": [
                 "j8mj59343f.execute-api.us-east-1.amazonaws.com"
             ],
@@ -139,10 +147,14 @@ def _generate_api_gateway_post(body: dict, path: str, endpoint: str, stage: str,
     return payload
 
 
-def _generate_api_gateway_get(query: dict, path: str, endpoint: str, stage: str, service_slug: str):
+def _generate_api_gateway_get(query: dict, path: str, endpoint: str, stage: str, service_slug: str, cookies: dict):
 
     requestContext_path = f'/{stage}{path}'
     resourcePath =  f'/{service_slug}/'+'{proxy+}'
+    if cookies:
+        send_cookies = urllib.parse.urlencode(cookies, doseq=False)
+    else:
+        send_cookies = None
 
     payload = {
             "resource": resourcePath,
@@ -166,6 +178,7 @@ def _generate_api_gateway_get(query: dict, path: str, endpoint: str, stage: str,
                 "CloudFront-Is-SmartTV-Viewer": "false",
                 "CloudFront-Is-Tablet-Viewer": "false",
                 "CloudFront-Viewer-Country": "US",
+                "Cookie": send_cookies,
                 "Host": "1234567890.execute-api.us-east-1.amazonaws.com",
                 "Upgrade-Insecure-Requests": "1",
                 "User-Agent": "Custom User Agent String",
@@ -206,6 +219,9 @@ def _generate_api_gateway_get(query: dict, path: str, endpoint: str, stage: str,
                 "CloudFront-Viewer-Country": [
                     "US"
                 ],
+                "Cookie": [
+                    send_cookies
+                ],                 
                 "Host": [
                     "0123456789.execute-api.us-east-1.amazonaws.com"
                 ],
@@ -263,7 +279,7 @@ def _generate_api_gateway_get(query: dict, path: str, endpoint: str, stage: str,
     return payload
 
 
-def lambda_get(service_slug: str, endpoint: str, query: dict):
+def lambda_get(service_slug: str, endpoint: str, query: dict, cookies: dict):
 
     client = boto3.client('lambda')
 
@@ -275,7 +291,7 @@ def lambda_get(service_slug: str, endpoint: str, query: dict):
     path = f"/{service_slug}/{endpoint}"
     function_name = f"{service_slug}_function"
 
-    payload = _generate_api_gateway_get(query=query, path=path, endpoint=endpoint, stage=stage, service_slug=service_slug)
+    payload = _generate_api_gateway_get(query=query, path=path, endpoint=endpoint, stage=stage, service_slug=service_slug, cookies=cookies)
 
     response = client.invoke(
         FunctionName=function_name,
@@ -355,7 +371,7 @@ def service_get(service_slug, endpoint, headers=None, query=None, force_api_gate
     if (os.getenv('USE_LAMBDA_SDK', False) == '1') and (not force_api_gateway):
 
         print('service_get -> SDK LAMBDA')
-        return lambda_get(service_slug, endpoint, query)
+        return lambda_get(service_slug, endpoint, query, cookies)
 
     else:
 
