@@ -17,122 +17,122 @@ def _generate_api_gateway_post(body: dict, path: str, endpoint: str, stage: str,
     #base64_body = base64.b64encode(str(body).encode())
 
     base64_body = urllib.parse.urlencode(body, doseq=False)
-
+    
     payload = {
         "body": base64_body,
-        "path": path,
-        "resource": resourcePath,
-        "httpMethod": "POST",
-        "isBase64Encoded": False,
-        "multiValueQueryStringParameters": {},
-        "pathParameters": {
-            "proxy": endpoint
-        },
-        "stageVariables": {
-            "alias": stage
-        },
         "headers": {
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-            "Accept-Encoding": "gzip, deflate, sdch",
-            "Accept-Language": "en-US,en;q=0.8",
-            "Cache-Control": "max-age=0",
+            "Accept": "*/*",
+            "Accept-Encoding": "gzip, deflate",
             "CloudFront-Forwarded-Proto": "https",
             "CloudFront-Is-Desktop-Viewer": "true",
             "CloudFront-Is-Mobile-Viewer": "false",
             "CloudFront-Is-SmartTV-Viewer": "false",
             "CloudFront-Is-Tablet-Viewer": "false",
             "CloudFront-Viewer-Country": "US",
-            "Host": "1234567890.execute-api.us-east-1.amazonaws.com",
-            "Upgrade-Insecure-Requests": "1",
-            "User-Agent": "Custom User Agent String",
-            "Via": "1.1 08f323deadbeefa7af34d5feb414ce27.cloudfront.net (CloudFront)",
-            "X-Amz-Cf-Id": "cDehVQoZnx43VYQb9j2-nvCh-9z396Uhbp027Y2JvkCPNLmGJHqlaA==",
-            "X-Forwarded-For": "127.0.0.1, 127.0.0.2",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Host": "j8mj59343f.execute-api.us-east-1.amazonaws.com",
+            "User-Agent": "python-requests/2.25.1",
+            "Via": "1.1 f9efe5e72b7e5cc47bf34a0b0debcbe2.cloudfront.net (CloudFront)",
+            "X-Amz-Cf-Id": "-qHuqC-YS36C7cnoHqsam9fkGdOoR86LGndRRsczPWQ6AfIUEM4_ag==",
+            "X-Amzn-Trace-Id": "Root=1-60f6eeaf-458ccae85084fb5670584faa",
+            "X-Forwarded-For": "18.209.99.174, 70.132.33.145",
             "X-Forwarded-Port": "443",
             "X-Forwarded-Proto": "https"
         },
+        "httpMethod": "POST",
+        "isBase64Encoded": False,
         "multiValueHeaders": {
             "Accept": [
-            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
+                "*/*"
             ],
             "Accept-Encoding": [
-            "gzip, deflate, sdch"
-            ],
-            "Accept-Language": [
-            "en-US,en;q=0.8"
-            ],
-            "Cache-Control": [
-            "max-age=0"
+                "gzip, deflate"
             ],
             "CloudFront-Forwarded-Proto": [
-            "https"
+                "https"
             ],
             "CloudFront-Is-Desktop-Viewer": [
-            "true"
+                "true"
             ],
             "CloudFront-Is-Mobile-Viewer": [
-            "false"
+                "false"
             ],
             "CloudFront-Is-SmartTV-Viewer": [
-            "false"
+                "false"
             ],
             "CloudFront-Is-Tablet-Viewer": [
-            "false"
+                "false"
             ],
             "CloudFront-Viewer-Country": [
-            "US"
+                "US"
+            ],
+            "Content-Type": [
+                "application/x-www-form-urlencoded"
             ],
             "Host": [
-            "0123456789.execute-api.us-east-1.amazonaws.com"
-            ],
-            "Upgrade-Insecure-Requests": [
-            "1"
+                "j8mj59343f.execute-api.us-east-1.amazonaws.com"
             ],
             "User-Agent": [
-            "Custom User Agent String"
+                "python-requests/2.25.1"
             ],
             "Via": [
-            "1.1 08f323deadbeefa7af34d5feb414ce27.cloudfront.net (CloudFront)"
+                "1.1 f9efe5e72b7e5cc47bf34a0b0debcbe2.cloudfront.net (CloudFront)"
             ],
             "X-Amz-Cf-Id": [
-            "cDehVQoZnx43VYQb9j2-nvCh-9z396Uhbp027Y2JvkCPNLmGJHqlaA=="
+                "-qHuqC-YS36C7cnoHqsam9fkGdOoR86LGndRRsczPWQ6AfIUEM4_ag=="
+            ],
+            "X-Amzn-Trace-Id": [
+                "Root=1-60f6eeaf-458ccae85084fb5670584faa"
             ],
             "X-Forwarded-For": [
-            "127.0.0.1, 127.0.0.2"
+                "18.209.99.174, 70.132.33.145"
             ],
             "X-Forwarded-Port": [
-            "443"
+                "443"
             ],
             "X-Forwarded-Proto": [
-            "https"
+                "https"
             ]
         },
+        "multiValueQueryStringParameters": None,
+        "path": path,
+        "pathParameters": {
+            "proxy": endpoint
+        },
+        "queryStringParameters": None,
         "requestContext": {
-                "accountId": "123456789012",
-                "resourceId": "123456",
-                "stage": "prod",
-                "requestId": "c6af9ac6-7b61-11e6-9a41-93e8deadbeef",
-                "requestTime": "09/Apr/2015:12:34:56 +0000",
-                "requestTimeEpoch": 1428582896000,
-                "identity": {
-                "cognitoIdentityPoolId": None,
-                "accountId": None,
-                "cognitoIdentityId": None,
-                "caller": None,
-                "accessKey": None,
-                "sourceIp": "127.0.0.1",
-                "cognitoAuthenticationType": None,
-                "cognitoAuthenticationProvider": None,
-                "userArn": None,
-                "userAgent": "Custom User Agent String",
-                "user": None
-            },
-            "path": requestContext_path,            
-            "resourcePath": resourcePath,
-            "stage": stage,
+            "accountId": "521871819478",
+            "apiId": "j8mj59343f",
+            "domainName": "j8mj59343f.execute-api.us-east-1.amazonaws.com",
+            "domainPrefix": "j8mj59343f",
+            "extendedRequestId": "Cxo7aHrrIAMFTtQ=",
             "httpMethod": "POST",
-            "apiId": "1234567890",
-            "protocol": "HTTP/1.1"
+            "identity": {
+                "accessKey": None,
+                "accountId": None,
+                "caller": None,
+                "cognitoAuthenticationProvider": None,
+                "cognitoAuthenticationType": None,
+                "cognitoIdentityId": None,
+                "cognitoIdentityPoolId": None,
+                "principalOrgId": None,
+                "sourceIp": "18.209.99.174",
+                "user": None,
+                "userAgent": "python-requests/2.25.1",
+                "userArn": None
+            },
+            "path": requestContext_path,
+            "protocol": "HTTP/1.1",
+            "requestId": "760ce857-da0b-4699-8194-d57bce7cc549",
+            "requestTime": "20/Jul/2021:15:41:35 +0000",
+            "requestTimeEpoch": 1626795695299,
+            "resourceId": "6dlorr",
+            "resourcePath": resourcePath,
+            "stage": stage
+        },
+        "resource": resourcePath,
+        "stageVariables": {
+            "lambdaAlias": stage
         }
     }
 
