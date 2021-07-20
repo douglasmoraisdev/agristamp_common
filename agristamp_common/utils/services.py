@@ -16,7 +16,7 @@ def _generate_api_gateway_post(body: dict, path: str, endpoint: str, stage: str,
     base64_body = base64.b64encode(str(body).encode())
 
     payload = {
-        "body": base64_body,
+        "body": base64_body.decode(),
         "path": path,
         "resource": resourcePath,
         "httpMethod": "POST",
