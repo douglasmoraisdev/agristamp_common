@@ -1,5 +1,6 @@
 import requests
 import base64
+import urllib
 import os
 from .cache import redis_set, redis_hget
 import json
@@ -13,14 +14,16 @@ def _generate_api_gateway_post(body: dict, path: str, endpoint: str, stage: str,
 
     requestContext_path = f'/{stage}{path}'
     resourcePath =  f'/{service_slug}/'+'{proxy+}'
-    base64_body = base64.b64encode(str(body).encode())
+    #base64_body = base64.b64encode(str(body).encode())
+
+    base64_body = urllib.parse.urlencode(body, doseq=False)
 
     payload = {
-        "body": base64_body.decode(),
+        "body": base64_body,
         "path": path,
         "resource": resourcePath,
         "httpMethod": "POST",
-        "isBase64Encoded": True,
+        "isBase64Encoded": False,
         "multiValueQueryStringParameters": {},
         "pathParameters": {
             "proxy": endpoint
