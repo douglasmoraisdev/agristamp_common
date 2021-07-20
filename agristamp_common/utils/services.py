@@ -322,7 +322,7 @@ def lambda_get(service_slug: str, endpoint: str, query: dict, cookies: dict):
     return response_obj
 
 
-def lambda_post(service_slug: str, endpoint: str, body: dict):
+def lambda_post(service_slug: str, endpoint: str, body: dict, cookies: dict):
 
     client = boto3.client('lambda')
 
@@ -334,7 +334,7 @@ def lambda_post(service_slug: str, endpoint: str, body: dict):
     path = f"/{service_slug}/{endpoint}"
     function_name = f"{service_slug}_function"
 
-    payload = _generate_api_gateway_post(body=body, path=path, endpoint=endpoint, stage=stage, service_slug=service_slug)
+    payload = _generate_api_gateway_post(body=body, path=path, endpoint=endpoint, stage=stage, service_slug=service_slug, cookies=cookies)
 
     response = client.invoke(
         FunctionName=function_name,
