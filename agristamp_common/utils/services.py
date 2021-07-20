@@ -9,7 +9,7 @@ from dotmap import DotMap
 
 def _generate_api_gateway_post(body: dict, path: str, stage: str):
 
-    body = body.encode()
+    #body = body.encode()
 
     payload = {
         #"body": "{\"payload\": \"teste\"}",
