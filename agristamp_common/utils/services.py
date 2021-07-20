@@ -291,7 +291,7 @@ def lambda_get(service_slug: str, endpoint: str, query: dict):
 
     response_obj = DotMap()
     response_obj.status_code = response_payload['statusCode']
-    response_obj.headers = response_payload['headers']
+    response_obj.headers = response['ResponseMetadata']['HTTPHeaders']
     response_obj.text = raw_payload
     response_obj.json = json_attr
     response_obj.error = response['FunctionError'] if 'FunctionError' in response else None
@@ -334,7 +334,7 @@ def lambda_post(service_slug: str, endpoint: str, body: dict):
 
     response_obj = DotMap()
     response_obj.status_code = response_payload['statusCode']
-    response_obj.headers = response_payload['headers']
+    response_obj.headers = response['ResponseMetadata']['HTTPHeaders']
     response_obj.text = raw_payload
     response_obj.json = json_attr
     response_obj.error = response['FunctionError'] if 'FunctionError' in response else None
