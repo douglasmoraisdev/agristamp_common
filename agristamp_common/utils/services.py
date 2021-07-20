@@ -279,13 +279,20 @@ def lambda_get(service_slug: str, endpoint: str, query: dict):
         Qualifier=stage
     )
 
+    try:
+        response_body = json.loads(response['Payload'].read())['body']
+        response_body = json.loads(response_body)
+
+    except json.decoder.JSONDecodeError:
+        response_body = response['Payload'].read()
+
+    json_attr = lambda :response_body
+
     response_obj = DotMap()
     response_obj.status_code = response['StatusCode']
     response_obj.text = response['Payload'].read()
-    response_obj.json = lambda :response['Payload'].read()
+    response_obj.json = json_attr
     response_obj.error = response['FunctionError'] if 'FunctionError' in response else None
-
-    return response_obj
 
 
 def lambda_post(service_slug: str, endpoint: str, body: dict):
@@ -311,14 +318,22 @@ def lambda_post(service_slug: str, endpoint: str, body: dict):
         Qualifier=stage
     )
 
+    try:
+        response_body = json.loads(response['Payload'].read())['body']
+        response_body = json.loads(response_body)
+
+    except json.decoder.JSONDecodeError:
+        response_body = response['Payload'].read()
+
+    json_attr = lambda :response_body
+
     response_obj = DotMap()
     response_obj.status_code = response['StatusCode']
     response_obj.text = response['Payload'].read()
-    response_obj.json = lambda :response['Payload'].read()
+    response_obj.json = json_attr
     response_obj.error = response['FunctionError'] if 'FunctionError' in response else None
 
     return response_obj
-
 
 def service_get(service_slug, endpoint, headers=None, query=None):
 
