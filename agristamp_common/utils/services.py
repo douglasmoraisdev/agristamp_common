@@ -342,10 +342,10 @@ def lambda_post(service_slug: str, endpoint: str, body: dict):
     return response_obj
 
 
-def service_get(service_slug, endpoint, headers=None, query=None):
+def service_get(service_slug, endpoint, headers=None, query=None, force_api_gateway=False):
 
 
-    if os.getenv('USE_LAMBDA_SDK', False) == '1':
+    if (os.getenv('USE_LAMBDA_SDK', False) == '1') and (not force_api_gateway):
 
         print('service_get -> SDK LAMBDA')
         return lambda_get(service_slug, endpoint, query)
@@ -365,10 +365,10 @@ def service_get(service_slug, endpoint, headers=None, query=None):
         return request
 
 
-def service_post(service_slug, endpoint, headers=None, payload=None):
+def service_post(service_slug, endpoint, headers=None, payload=None, force_api_gateway=False):
 
-    if os.getenv('USE_LAMBDA_SDK', False) == '1':
-    
+    if (os.getenv('USE_LAMBDA_SDK', False) == '1') and (not force_api_gateway):
+
         print('service_get -> SDK LAMBDA')
         return lambda_post(service_slug, endpoint, payload)
 
