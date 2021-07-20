@@ -349,7 +349,7 @@ def lambda_post(service_slug: str, endpoint: str, body: dict):
     return response_obj
 
 
-def service_get(service_slug, endpoint, headers=None, query=None, force_api_gateway=False):
+def service_get(service_slug, endpoint, headers=None, query=None, force_api_gateway=False, cookies=None):
 
 
     if (os.getenv('USE_LAMBDA_SDK', False) == '1') and (not force_api_gateway):
@@ -367,12 +367,12 @@ def service_get(service_slug, endpoint, headers=None, query=None, force_api_gate
 
         service_url = f"{os.getenv('CLUSTER_URL')}/{os.getenv('STAGE')}/{service_slug}/{endpoint}"
 
-        request = requests.get(service_url, params=query, headers=headers)
+        request = requests.get(service_url, params=query, headers=headers, cookies=cookies)
 
         return request
 
 
-def service_post(service_slug, endpoint, headers=None, payload=None, force_api_gateway=False):
+def service_post(service_slug, endpoint, headers=None, payload=None, force_api_gateway=False, cookies=None):
 
     if (os.getenv('USE_LAMBDA_SDK', False) == '1') and (not force_api_gateway):
 
@@ -388,7 +388,7 @@ def service_post(service_slug, endpoint, headers=None, payload=None, force_api_g
 
         service_url = f"{os.getenv('CLUSTER_URL')}/{os.getenv('STAGE')}/{service_slug}/{endpoint}"
 
-        request = requests.post(service_url, data=payload, headers=headers)
+        request = requests.post(service_url, data=payload, headers=headers, cookies=cookies)
 
         return request
 
