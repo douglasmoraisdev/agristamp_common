@@ -10,3 +10,11 @@ logger = logging.getLogger()
 log_level = os.getenv('LOG_LEVEL') or logging.ERROR
 
 logger.setLevel(log_level)
+# create console handler with a higher log level
+ch = logging.StreamHandler()
+ch.setLevel(log_level)
+# create formatter and add it to the handlers
+formatter = logging.Formatter(f'[service_log][{STAGE}] %(message)s')
+ch.setFormatter(formatter)
+# add the handlers to logger
+logger.addHandler(ch)
