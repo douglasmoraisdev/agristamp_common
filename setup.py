@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="agristamp_common",
-    version="1.5.32",
+    version="1.5.33",
     author="Agristamp",
     author_email="agristamp@agristamp.com.br",
     description="Agristamp Microservices Commom Dependencies",
