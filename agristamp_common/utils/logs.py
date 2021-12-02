@@ -2,7 +2,7 @@ import logging
 import os
 
 STAGE = os.getenv('STAGE', 'unknow')
-FORMAT = f'[service_log][{STAGE}][%(levelno)s] %(message)s'
+FORMAT = f'[service_log][{STAGE}][%(levelname)s] %(message)s'
 logging.basicConfig(format=FORMAT)
 
 logger = logging.getLogger()
