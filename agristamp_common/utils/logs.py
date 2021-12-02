@@ -2,7 +2,7 @@ import logging
 import os
 
 STAGE = os.getenv('STAGE', 'unknow')
-FORMAT = f'[service_log][{STAGE}] %(message)s'
+FORMAT = f'[service_log][{STAGE}][%(levelno)s] %(message)s'
 logging.basicConfig(format=FORMAT)
 
 logger = logging.getLogger()
@@ -14,11 +14,9 @@ logger.setLevel(log_level)
 ch = logging.StreamHandler()
 ch.setLevel(log_level)
 
-# Level name as String
-str_level = logging.getLevelName(logger.getEffectiveLevel())
 
 # create formatter and add it to the handlers
-formatter = logging.Formatter(f'[service_log][{STAGE}][{str_level}] %(message)s')
+formatter = logging.Formatter(FORMAT)
 ch.setFormatter(formatter)
 # add the handlers to logger
 logger.addHandler(ch)
