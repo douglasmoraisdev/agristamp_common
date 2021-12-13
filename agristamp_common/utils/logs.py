@@ -1,8 +1,35 @@
+import json
 import logging
 import os
 
+class DefaultsLogFilter(logging.Filter):
+    def filter(self, record):
+        if not hasattr(record, 'error_type'):
+            record.error_type = ''
+
+        if not hasattr(record, 'value'):
+            record.value = ''
+
+        if not hasattr(record, 'status_code'):
+            record.status_code = ''
+
+        return True
+
 STAGE = os.getenv('STAGE', 'unknow')
-FORMAT = f'[service_log][{STAGE}][%(levelname)s] %(message)s'
+SERVICE_SLUG = os.getenv('SERVICE_SLUG', 'unknow')
+
+FORMAT = json.dumps({
+    'type': 'service_log',
+    'stage': STAGE,
+    'service_slug': SERVICE_SLUG,
+    'log_level': '%(levelname)s',
+    'message': '%(message)s',
+    'error_type': '%(error_type)s',
+    'value': '%(value)s',
+    'status_code': '%(status_code)s'
+})
+
+
 logging.basicConfig(format=FORMAT)
 
 logger = logging.getLogger()
@@ -10,9 +37,11 @@ logger = logging.getLogger()
 log_level = os.getenv('LOG_LEVEL') or logging.ERROR
 
 logger.setLevel(log_level)
+logger.addFilter(DefaultsLogFilter())
 # create console handler with a higher log level
 ch = logging.StreamHandler()
 ch.setLevel(log_level)
+ch.addFilter(DefaultsLogFilter())
 
 
 # create formatter and add it to the handlers
