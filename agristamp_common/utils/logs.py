@@ -4,14 +4,19 @@ import os
 
 class DefaultsLogFilter(logging.Filter):
     def filter(self, record):
-        if not hasattr(record, 'error_type'):
-            record.error_type = ''
 
-        if not hasattr(record, 'value'):
-            record.value = ''
+        try:
+            if not hasattr(record, 'error_type'):
+                record.error_type = ''
 
-        if not hasattr(record, 'status_code'):
-            record.status_code = ''
+            if not hasattr(record, 'value'):
+                record.value = ''
+
+            if not hasattr(record, 'status_code'):
+                record.status_code = ''
+
+        except KeyError as ke:
+            return True
 
         return True
 
