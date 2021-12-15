@@ -7,6 +7,7 @@ import json
 import boto3
 from dotmap import DotMap
 
+from agristamp_common.utils.logs import logger
 
 def _generate_api_gateway_post(body: dict, path: str, endpoint: str, stage: str, service_slug: str, cookies: dict):
 
@@ -21,7 +22,7 @@ def _generate_api_gateway_post(body: dict, path: str, endpoint: str, stage: str,
         send_cookies = urllib.parse.urlencode(cookies, doseq=False)
     else:
         send_cookies = ''
-    
+
     payload = {
         "body": base64_body,
         "headers": {
@@ -76,7 +77,7 @@ def _generate_api_gateway_post(body: dict, path: str, endpoint: str, stage: str,
             ],
             "Cookie": [
                 send_cookies
-            ],            
+            ],
             "Host": [
                 "j8mj59343f.execute-api.us-east-1.amazonaws.com"
             ],
@@ -221,7 +222,7 @@ def _generate_api_gateway_get(query: dict, path: str, endpoint: str, stage: str,
                 ],
                 "Cookie": [
                     send_cookies
-                ],                 
+                ],
                 "Host": [
                     "0123456789.execute-api.us-east-1.amazonaws.com"
                 ],
@@ -336,6 +337,7 @@ def lambda_post(service_slug: str, endpoint: str, body: dict, cookies: dict = No
 
     payload = _generate_api_gateway_post(body=body, path=path, endpoint=endpoint, stage=stage, service_slug=service_slug, cookies=cookies)
 
+    logger.info(f'Enviando POST via LAMBDA para {service_slug} data:[{payload}]')
     response = client.invoke(
         FunctionName=function_name,
         InvocationType='RequestResponse',
@@ -362,6 +364,8 @@ def lambda_post(service_slug: str, endpoint: str, body: dict, cookies: dict = No
     response_obj.json = json_attr
     response_obj.error = response['FunctionError'] if 'FunctionError' in response else None
 
+    logger.info(f'Resultado do POST via LAMBDA para {service_slug}: {response_obj.status_code}')
+
     return response_obj
 
 
@@ -383,7 +387,9 @@ def service_get(service_slug, endpoint, headers=None, query=None, force_api_gate
 
         service_url = f"{os.getenv('CLUSTER_URL')}/{os.getenv('STAGE')}/{service_slug}/{endpoint}"
 
+        logger.info(f'Enviando GET {service_url} query:[{query}] headers:[{headers}] cookies: [{cookies}]')
         request = requests.get(service_url, params=query, headers=headers, cookies=cookies)
+        logger.info(f'Resultado do GET para {service_url}: {request.status_code}')
 
         return request
 
@@ -404,7 +410,9 @@ def service_post(service_slug, endpoint, headers=None, payload=None, force_api_g
 
         service_url = f"{os.getenv('CLUSTER_URL')}/{os.getenv('STAGE')}/{service_slug}/{endpoint}"
 
+        logger.info(f'Enviando POST {service_url} data:[{payload}] headers:[{headers}] cookies: [{cookies}]')
         request = requests.post(service_url, data=payload, headers=headers, cookies=cookies)
+        logger.info(f'Resultado do POST para {service_url}: {request.status_code}')
 
         return request
 
