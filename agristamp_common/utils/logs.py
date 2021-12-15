@@ -22,7 +22,6 @@ class DefaultsLogFilter(logging.Filter):
 
 STAGE = os.getenv('STAGE', 'unknow')
 SERVICE_SLUG = os.getenv('SERVICE_SLUG', 'unknow')
-
 FORMAT = json.dumps({
     'type': 'service_log',
     'stage': STAGE,
@@ -33,24 +32,22 @@ FORMAT = json.dumps({
     'value': '%(value)s',
     'status_code': '%(status_code)s'
 })
-
-
-logging.basicConfig(format=FORMAT)
+LOG_LEVEL = os.getenv('LOG_LEVEL') or logging.ERROR
 
 logger = logging.getLogger()
-
-log_level = os.getenv('LOG_LEVEL') or logging.ERROR
-
-logger.setLevel(log_level)
+logger.setLevel(LOG_LEVEL)
 logger.addFilter(DefaultsLogFilter())
-# create console handler with a higher log level
+
+# create Console Handler
 ch = logging.StreamHandler()
-ch.setLevel(log_level)
+ch.setLevel(LOG_LEVEL)
 ch.addFilter(DefaultsLogFilter())
 
-
 # create formatter and add it to the handlers
-formatter = logging.Formatter(FORMAT)
-ch.setFormatter(formatter)
+ch.setFormatter(logging.Formatter(FORMAT))
+
 # add the handlers to logger
+if (logger.hasHandlers()):
+    logger.handlers.clear()
+
 logger.addHandler(ch)
