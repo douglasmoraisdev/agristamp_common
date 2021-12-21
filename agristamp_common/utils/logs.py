@@ -21,10 +21,6 @@ class DefaultsLogFilter(logging.Filter):
 
         return True
 
-# fora do stage local seta todos os logs para CRITICAL
-[logging.getLogger(key).setLevel(logging.CRITICAL)
- for index, key in enumerate(logging.root.manager.loggerDict)]
-
 STAGE = os.getenv('STAGE', 'unknow')
 SERVICE_SLUG = os.getenv('SERVICE_SLUG', 'unknow')
 FORMAT = json.dumps({
@@ -38,6 +34,13 @@ FORMAT = json.dumps({
     'status_code': '%(status_code)s'
 })
 LOG_LEVEL = os.getenv('LOG_LEVEL') or logging.ERROR
+
+
+# fora do stage local seta todos os logs para CRITICAL
+if STAGE != 'local':
+    [logging.getLogger(key).setLevel(logging.CRITICAL)
+    for index, key in enumerate(logging.root.manager.loggerDict)]
+
 
 logger = logging.getLogger()
 logger.setLevel(LOG_LEVEL)
