@@ -2,6 +2,7 @@ import json
 import logging
 import os
 
+
 class DefaultsLogFilter(logging.Filter):
     def filter(self, record):
 
@@ -19,6 +20,10 @@ class DefaultsLogFilter(logging.Filter):
             return True
 
         return True
+
+# fora do stage local seta todos os logs para CRITICAL
+[logging.getLogger(key).setLevel(logging.CRITICAL)
+ for index, key in enumerate(logging.root.manager.loggerDict)]
 
 STAGE = os.getenv('STAGE', 'unknow')
 SERVICE_SLUG = os.getenv('SERVICE_SLUG', 'unknow')
