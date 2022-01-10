@@ -16,6 +16,9 @@ class DefaultsLogFilter(logging.Filter):
             if not hasattr(record, 'status_code'):
                 record.status_code = ''
 
+            if not hasattr(record, 'error_code'):
+                record.error_code = ''
+
         except KeyError as ke:
             return True
 
@@ -30,6 +33,7 @@ FORMAT = json.dumps({
     'log_level': '%(levelname)s',
     'message': '%(message)s',
     'error_type': '%(error_type)s',
+    'error_code': '%(error_code)s',
     'value': '%(value)s',
     'status_code': '%(status_code)s'
 })
