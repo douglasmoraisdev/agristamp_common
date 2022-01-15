@@ -369,7 +369,7 @@ def lambda_post(service_slug: str, endpoint: str, body: dict, cookies: dict = No
     return response_obj
 
 
-def service_get(service_slug, endpoint, headers=None, query=None, force_api_gateway=False, cookies=None):
+def service_get(service_slug, endpoint, headers=None, query=None, force_api_gateway=False, cookies=None, hash_proposta=''):
 
 
     if (os.getenv('USE_LAMBDA_SDK', False) == '1') and (not force_api_gateway):
@@ -387,14 +387,19 @@ def service_get(service_slug, endpoint, headers=None, query=None, force_api_gate
 
         service_url = f"{os.getenv('CLUSTER_URL')}/{os.getenv('STAGE')}/{service_slug}/{endpoint}"
 
-        logger.info(f'Enviando GET {service_url} query:[{query}] headers:[{headers}] cookies: [{cookies}]')
+        logger.info(f'Enviando GET {service_url} headers:[{headers}] cookies: [{cookies}]',
+                      extra={'hash_proposta': hash_proposta, 'data': query})
         request = requests.get(service_url, params=query, headers=headers, cookies=cookies)
         logger.info(f'Resultado do GET para {service_url}: {request.status_code}')
+        if request.status_code == 200:
+            logger.info(f'Resultado do POST para {service_url}: {request.status_code}', extra={'hash_proposta': hash_proposta, 'data': request.json()})
+        else:
+            logger.info(f'Resultado do POST para {service_url}: {request.status_code}', extra={'hash_proposta': hash_proposta, 'data': request.text})
 
         return request
 
 
-def service_post(service_slug, endpoint, headers=None, payload=None, force_api_gateway=False, cookies=None):
+def service_post(service_slug, endpoint, headers=None, payload=None, force_api_gateway=False, cookies=None, hash_proposta=''):
 
     if (os.getenv('USE_LAMBDA_SDK', False) == '1') and (not force_api_gateway):
 
@@ -410,9 +415,13 @@ def service_post(service_slug, endpoint, headers=None, payload=None, force_api_g
 
         service_url = f"{os.getenv('CLUSTER_URL')}/{os.getenv('STAGE')}/{service_slug}/{endpoint}"
 
-        logger.info(f'Enviando POST {service_url} data:[{payload}] headers:[{headers}] cookies: [{cookies}]')
+        logger.info(f'Enviando POST {service_url} headers:[{headers}] cookies: [{cookies}]',
+                      extra={'hash_proposta': hash_proposta, 'data': payload})
         request = requests.post(service_url, data=payload, headers=headers, cookies=cookies)
-        logger.info(f'Resultado do POST para {service_url}: {request.status_code}')
+        if request.status_code == 200:
+            logger.info(f'Resultado do POST para {service_url}: {request.status_code}', extra={'hash_proposta': hash_proposta, 'data': request.json()})
+        else:
+            logger.info(f'Resultado do POST para {service_url}: {request.status_code}', extra={'hash_proposta': hash_proposta, 'data': request.text})
 
         return request
 
