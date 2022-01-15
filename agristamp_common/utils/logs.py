@@ -22,6 +22,9 @@ class DefaultsLogFilter(logging.Filter):
             if not hasattr(record, 'hash_proposta'):
                 record.hash_proposta = ''
 
+            if not hasattr(record, 'data'):
+                record.data = ''
+
         except KeyError as ke:
             return True
 
@@ -39,6 +42,7 @@ FORMAT = json.dumps({
     'error_code': '%(error_code)s',
     'hash_proposta': '%(hash_proposta)s',
     'value': '%(value)s',
+    'data': '%(data)s',
     'status_code': '%(status_code)s'
 })
 LOG_LEVEL = os.getenv('LOG_LEVEL') or logging.ERROR
