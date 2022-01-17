@@ -390,11 +390,11 @@ def service_get(service_slug, endpoint, headers=None, query=None, force_api_gate
         logger.info(f'Enviando GET {service_url} headers:[{headers}] cookies: [{cookies}]',
                       extra={'hash_proposta': hash_proposta, 'data': query})
         request = requests.get(service_url, params=query, headers=headers, cookies=cookies)
-        logger.info(f'Resultado do GET para {service_url}: {request.status_code}')
+
         if request.status_code == 200:
-            logger.info(f'Resultado do POST para {service_url}: {request.status_code}', extra={'hash_proposta': hash_proposta, 'data': request.json()})
+            logger.info(f'Resultado do GET para {service_url}: {request.status_code}', extra={'hash_proposta': hash_proposta, 'data': request.json()})
         else:
-            logger.info(f'Resultado do POST para {service_url}: {request.status_code}', extra={'hash_proposta': hash_proposta, 'data': request.text})
+            logger.info(f'Resultado do GET para {service_url}: {request.status_code}', extra={'hash_proposta': hash_proposta, 'data': request.text})
 
         return request
 
