@@ -386,7 +386,8 @@ def service_get(service_slug, endpoint, headers=None, query=None, force_api_gate
             endpoint = endpoint[1:]
 
         service_url = f"{os.getenv('CLUSTER_URL')}/{os.getenv('STAGE')}/{service_slug}/{endpoint}"
-        headers.update({'Hash': hash_proposta})        
+        if hash_proposta != '' and hash_proposta is not None:
+            headers.update({'Hash': hash_proposta})
 
         logger.info(f'Enviando GET {service_url} headers:[{headers}] cookies: [{cookies}]',
                       extra={'hash_proposta': hash_proposta, 'data': query})
@@ -415,7 +416,8 @@ def service_post(service_slug, endpoint, headers=None, payload=None, force_api_g
             endpoint = endpoint[1:]
 
         service_url = f"{os.getenv('CLUSTER_URL')}/{os.getenv('STAGE')}/{service_slug}/{endpoint}"
-        headers.update({'Hash': hash_proposta})
+        if hash_proposta != '' and hash_proposta is not None:
+            headers.update({'Hash': hash_proposta})
 
         logger.info(f'Enviando POST {service_url} headers:[{headers}] cookies: [{cookies}]',
                       extra={'hash_proposta': hash_proposta, 'data': payload})
